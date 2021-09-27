@@ -1,0 +1,32 @@
+.input-field {
+  display: flex;
+  margin: 10px 10px;
+  align-items: center;
+}
+
+.input-field input {
+  width: 70%;
+  margin: 10px;
+}
+
+.input-field button {
+  margin: 10px;
+}
+
+.btn-add-remove {
+  border: none;
+  background-color: transparent;
+  font-size: 22px;
+  color: rgb(0, 153, 255);
+}
+
+.table-list button {
+  border: none;
+  font-size: 22px;
+  background-color: transparent;
+  margin: 0 10px;
+}
+
+.delete-btn {
+  color: red;
+}
