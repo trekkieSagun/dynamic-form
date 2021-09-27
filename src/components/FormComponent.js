@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import Table from "react-bootstrap/Table";
-import { Breadcrumb } from "react-bootstrap";
-import { Button, ButtonGroup } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 import "./FormComponent.css";
 import { ModalPopUp } from "./ModalPopUp";
+import NavbarComponent from "./Navbar";
+import ToastComponent from "./ToastComponent";
 
 class FormComponent extends Component {
   constructor(props) {
@@ -18,8 +19,15 @@ class FormComponent extends Component {
       editingIndex: null,
       toggleEdit: false,
       edittingData: [{ name: null }],
+      showToast: false,
     };
   }
+
+  toggleToast = () => {
+    this.setState({
+      showToast: false,
+    });
+  };
 
   toggleAdd = () => {
     this.setState({
@@ -54,6 +62,7 @@ class FormComponent extends Component {
       showModal: false,
       data: [...this.state.data, ...updatedData],
       changeData: [{ name: "" }],
+      showToast: true,
     });
   };
 
@@ -113,91 +122,99 @@ class FormComponent extends Component {
 
   render() {
     return (
-      <div className="container m-5">
-        <div className="add-item-btn">
-          <Button variant="primary" onClick={this.toggleAdd}>
-            Add Item
-          </Button>
-        </div>
-
-        <ModalPopUp
-          show={this.state.showModal}
-          onHide={this.modalOff}
-          handleSubmit={this.handleSubmit}
-          handleChange={this.handleChange}
-          handleCancel={this.handleCancel}
-          addInput={this.addInput}
-          removeInput={this.removeInput}
-          changeData={this.state.changeData}
-        />
-
-        {this.state.clickedSubmit && (
-          <div className="item-lists">
-            <h3>Item Lists</h3>
-            <div className="table-list">
-              <Table>
-                <thead>
-                  <tr>
-                    <th>S.N</th>
-                    <th>Name</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                {this.state.data?.map((item, index) => (
-                  <tbody>
-                    <tr>
-                      <td>{index + 1}</td>{" "}
-                      {this.state.toggleEdit &&
-                      this.state.editingIndex === index ? (
-                        <td>
-                          <input
-                            className="form-control"
-                            type="text"
-                            name="name"
-                            value={this.state.edittingData.name}
-                            onChange={(e) => this.handleEditingData(e)}
-                          />
-                        </td>
-                      ) : (
-                        <td>{item.name}</td>
-                      )}
-                      {this.state.toggleEdit &&
-                      this.state.editingIndex === index ? (
-                        <td>
-                          <button onClick={(e) => this.submitEdit(e, index)}>
-                            <i
-                              style={{ color: "green" }}
-                              class="far fa-check-circle"
-                            ></i>
-                          </button>
-                          <button
-                            className="delete-btn"
-                            onClick={() => this.handleCancel()}
-                          >
-                            <i class="far fa-times-circle"></i>
-                          </button>
-                        </td>
-                      ) : (
-                        <td>
-                          <button onClick={() => this.handleEdit(index)}>
-                            <i class="far fa-edit"></i>
-                          </button>
-                          <button
-                            className="delete-btn"
-                            onClick={() => this.handleDelete(index)}
-                          >
-                            <i class="far fa-trash"></i>
-                          </button>
-                        </td>
-                      )}
-                    </tr>
-                  </tbody>
-                ))}
-              </Table>
-            </div>
+      <>
+        <NavbarComponent />
+        <div className="container m-5">
+          <div className="add-item-btn">
+            <Button variant="primary" onClick={this.toggleAdd}>
+              Add Item
+            </Button>
           </div>
-        )}
-      </div>
+
+          <ToastComponent
+            showToast={this.state.showToast}
+            toggleToast={this.toggleToast}
+          />
+
+          <ModalPopUp
+            show={this.state.showModal}
+            onHide={this.modalOff}
+            handleSubmit={this.handleSubmit}
+            handleChange={this.handleChange}
+            handleCancel={this.handleCancel}
+            addInput={this.addInput}
+            removeInput={this.removeInput}
+            changeData={this.state.changeData}
+          />
+
+          {this.state.clickedSubmit && (
+            <div className="item-lists">
+              <h3>Item Lists</h3>
+              <div className="table-list">
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>S.N</th>
+                      <th>Name</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  {this.state.data?.map((item, index) => (
+                    <tbody>
+                      <tr>
+                        <td>{index + 1}</td>{" "}
+                        {this.state.toggleEdit &&
+                        this.state.editingIndex === index ? (
+                          <td>
+                            <input
+                              className="form-control"
+                              type="text"
+                              name="name"
+                              value={this.state.edittingData.name}
+                              onChange={(e) => this.handleEditingData(e)}
+                            />
+                          </td>
+                        ) : (
+                          <td>{item.name}</td>
+                        )}
+                        {this.state.toggleEdit &&
+                        this.state.editingIndex === index ? (
+                          <td>
+                            <button onClick={(e) => this.submitEdit(e, index)}>
+                              <i
+                                style={{ color: "green" }}
+                                class="far fa-check-circle"
+                              ></i>
+                            </button>
+                            <button
+                              className="delete-btn"
+                              onClick={() => this.handleCancel()}
+                            >
+                              <i class="far fa-times-circle"></i>
+                            </button>
+                          </td>
+                        ) : (
+                          <td>
+                            <button onClick={() => this.handleEdit(index)}>
+                              <i class="far fa-edit"></i>
+                            </button>
+                            <button
+                              className="delete-btn"
+                              onClick={() => this.handleDelete(index)}
+                            >
+                              <i class="far fa-trash"></i>
+                            </button>
+                          </td>
+                        )}
+                      </tr>
+                    </tbody>
+                  ))}
+                </Table>
+              </div>
+            </div>
+          )}
+        </div>
+      </>
     );
   }
 }
